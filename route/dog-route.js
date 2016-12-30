@@ -38,9 +38,6 @@ dogRouter.put('/api/dog/:id', jsonParser, function(req, res, next) {
 dogRouter.delete('/api/dog/:id', function(req, res, next) {
   debug('DELETE: /api/dog');
 
-  // Dog.findByIdAndRemove(req.params.id)
-  // .then( () => res.sendStatus(204)) //if invalid id reject send 404
-  // .catch(next);
   Size.findByIdAndRemoveDog(req.params.id, req.body)
   .then( () => res.status(204).send())
   .catch(next);
