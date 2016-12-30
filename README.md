@@ -18,7 +18,7 @@ port that is set in your environmental variable in terminal.
 
 ## Sending POST GET PUT DELETE Request
 
->POST Request
+###POST Request
 
 >Size POST Request
 
@@ -37,7 +37,7 @@ The POST request must include the `sizeID`, as well as the `name` `breed` and `c
 The successful response should return a JSON object with values you entered along with a unique `id` and
 a status code of `200`.
 
->GET Request
+###GET Request
 
 >Size GET Request
 
@@ -51,9 +51,7 @@ In an new terminal window, send a Dog `GET` request by using the command `http l
 Example: `http localhost:8000/api/dog/5865db2fe19c9621196c0b7f`
 The successful response should return a JSON object with a status of `200`.
 
-![GET request screenshot](/assets/get-response-screenshot.png)
-
->PUT Request
+###PUT Request
 
 >Size PUT Request
 
@@ -71,7 +69,7 @@ Example: `http PUT localhost:8000/api/dog/5865db2fe19c9621196c0b7f name='Buster'
 A successful response should return a `200` status code with a json object
 with the updated content.
 
->DELETE Request
+###DELETE Request
 
 >Size DELETE Request
 
