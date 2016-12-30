@@ -92,7 +92,7 @@ describe('Dog Routes', function() {
       });
     });
   });
-  describe('PUT: /api/dog:id', function() {
+  describe('PUT: /api/dog/:id', function() {
     describe('with a valid body', function() {
       before( done => {
         new Dog(exampleDog).save()
@@ -101,6 +101,15 @@ describe('Dog Routes', function() {
           done();
         })
         .catch(done);
+      });
+      after( done => {
+        if(this.tempDog) {
+          Dog.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        };
+        done();
       });
       it('should update and return dog', done => {
         request.put(`${url}/api/dog/${this.tempDog._id}`)
@@ -111,6 +120,36 @@ describe('Dog Routes', function() {
           expect(res.body.name).to.equal('update name');
           expect(res.body.breed).to.equal('update breed');
           expect(res.body.color).to.equal('update color');
+          done();
+        });
+      });
+    });
+  });
+  describe('DELETE: /api/dog/:id', function() {
+    describe('with a valid body', function() {
+      before(done => {
+        new Dog(exampleDog).save()
+        .then( dog => {
+          this.tempDog = dog;
+          done();
+        })
+        .catch(done);
+      });
+      after( done => {
+        if(this.tempDog) {
+          Dog.remove({})
+          .then(() => done())
+          .catch(done);
+          return;
+        };
+        done();
+      });
+      it('should delete a dog', done => {
+        request.delete(`${url}/api/dog/${this.tempDog._id}`)
+        .end((err, res) => {
+          if(err) return done(err);
+          expect(res.status).to.equal(204);
+          expect(res.body).to.be.empty;
           done();
         });
       });
