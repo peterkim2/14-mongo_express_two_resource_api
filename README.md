@@ -69,7 +69,7 @@ Example: `http PUT localhost:8000/api/dog/5865db2fe19c9621196c0b7f name='Buster'
 A successful response should return a `200` status code with a json object
 with the updated content.
 
-###DELETE Request
+##cdDELETE Request
 
 >Size DELETE Request
 
