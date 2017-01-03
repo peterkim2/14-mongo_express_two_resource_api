@@ -44,6 +44,16 @@ describe('Size Routes', function() {
         });
       });
     });
+    describe('with invalid body', function() {
+      it('should return 400 code', done => {
+        request.post(`${url}/api/size`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
   });
   describe('GET: /api/size/:id', function() {
     describe('with a valid body', function() {
@@ -76,6 +86,16 @@ describe('Size Routes', function() {
           expect(res.body.name).to.equal('test size');
           expect(res.body.dogs.length).to.equal(1);
           expect(res.body.dogs[0].name).to.equal(exampleDog.name);
+          done();
+        });
+      });
+    });
+    describe('invalid request', function() {
+      it('should return a 404 code', done => {
+        request.get(`${url}/api/size`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
           done();
         });
       });
@@ -114,6 +134,16 @@ describe('Size Routes', function() {
         });
       });
     });
+    describe('invalid request', function() {
+      it('should return 404 code', done => {
+        request.put(`${url}/api/size`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
   });
   describe('DELETE: /api/size/:id', function() {
     describe('with a valid body', function() {
@@ -140,6 +170,16 @@ describe('Size Routes', function() {
           if(err) return done();
           expect(res.status).to.equal(204);
           expect(res.body).to.be.empty;
+          done();
+        });
+      });
+    });
+    describe('invalid request', function() {
+      it('should return 404 code', done => {
+        request.delete(`${url}/api/size`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
           done();
         });
       });

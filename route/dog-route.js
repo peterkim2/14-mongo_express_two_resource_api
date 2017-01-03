@@ -38,7 +38,7 @@ dogRouter.put('/api/dog/:id', jsonParser, function(req, res, next) {
 dogRouter.delete('/api/dog/:id', function(req, res, next) {
   debug('DELETE: /api/dog');
 
-  Size.findByIdAndRemoveDog(req.params.id)
+  Dog.findByIdAndRemove(req.params.id)
   .then( () => res.status(204).send())
   .catch(next);
 });

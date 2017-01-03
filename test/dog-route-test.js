@@ -23,23 +23,23 @@ const exampleSize = {
 
 describe('Dog Routes', function() {
   describe('POST: /api/size/:sizeID/dog', function() {
+    before( done => {
+      new Size(exampleSize).save()
+      .then( size => {
+        this.tempSize = size;
+        done();
+      })
+      .catch(done);
+    });
+    after( done => {
+      Promise.all([
+        Size.remove({}),
+        Dog.remove({})
+      ])
+      .then( () => done())
+      .catch(done);
+    });
     describe('with a valid body', () => {
-      before( done => {
-        new Size(exampleSize).save()
-        .then( size => {
-          this.tempSize = size;
-          done();
-        })
-        .catch(done);
-      });
-      after( done => {
-        Promise.all([
-          Size.remove({}),
-          Dog.remove({})
-        ])
-        .then( () => done())
-        .catch(done);
-      });
       it('should return a dog', done => {
         request.post(`${url}/api/size/${this.tempSize._id}/dog`)
         .send(exampleDog)
@@ -51,6 +51,28 @@ describe('Dog Routes', function() {
           expect(res.body.color).to.equal(exampleDog.color);
           expect(res.body.sizeID).to.equal(this.tempSize._id.toString());
           this.tempDog = res.body;
+          done();
+        });
+      });
+    });
+    describe('with an invalid sizeID', () => {
+      it('should return a 404 code', done => {
+        request.post(`${url}/api/size/1234/dog`)
+        .send(exampleDog)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+    describe('with an invalid body', () => {
+      it('should return a 400 code', done => {
+        request.post(`${url}/api/size/${this.tempSize._id}/dog`)
+        .send({name: 10})
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(400);
           done();
         });
       });
@@ -91,6 +113,16 @@ describe('Dog Routes', function() {
         });
       });
     });
+    describe('invalid request', function() {
+      it('should return 404', done => {
+        request.get(`${url}/api/dog/`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
   });
   describe('PUT: /api/dog/:id', function() {
     describe('with a valid body', function() {
@@ -124,6 +156,17 @@ describe('Dog Routes', function() {
         });
       });
     });
+    describe('invalid request', function() {
+      it('should return a 404', done => {
+        request.put(`${url}/api/dog/`)
+        .send({name:'update name', breed:'update breed', color:'update color'})
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
   });
   describe('DELETE: /api/dog/:id', function() {
     describe('with a valid body', function() {
@@ -150,6 +193,16 @@ describe('Dog Routes', function() {
           if(err) return done(err);
           expect(res.status).to.equal(204);
           expect(res.body).to.be.empty;
+          done();
+        });
+      });
+    });
+    describe('invalid request', function() {
+      it('should return 404 status', done => {
+        request.delete(`${url}/api/dog/`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
           done();
         });
       });
